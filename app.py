@@ -29,8 +29,6 @@ def predict_pathogenicity(HG38_Start, mutant_codon, disease, variant_type):
                               ['Variant_Type_' + variant_type for variant_type in variant_types])
     
     
-    # Check columns of the DataFrame
-    print("Columns of input_data:", input_data.columns)
     
     # Set the selected features
     input_row = [HG38_Start] + \
@@ -38,12 +36,11 @@ def predict_pathogenicity(HG38_Start, mutant_codon, disease, variant_type):
                 [1 if d == disease else 0 for d in diseases] + \
                 [1 if vt == variant_type else 0 for vt in variant_types] 
 
-    print("Input row:", input_row)  # Add this line to print out the input_row
     input_data.loc[0] = input_row
 
     st.dataframe(input_data)
-    st.write("Shape of input_data:", input_data.shape)  # Print the shape of input_data
-    st.write("Data type of input_data:", input_data.dtypes)  # Print the data type of input_data
+    # st.write("Shape of input_data:", input_data.shape)  # Print the shape of input_data
+    # st.write("Data type of input_data:", input_data.dtypes)  # Print the data type of input_data
     
     # Make the prediction
     prediction = model.predict(input_data)
@@ -60,7 +57,6 @@ def main():
     mutant_codon = st.selectbox('Select Mutant Codon:', mutant_codons)
     disease = st.selectbox('Select Disease:', diseases, index=diseases.index('Breast carcinoma'))
     variant_type = st.selectbox('Select Variant Type:', variant_types)
-    st.write(mutant_codon)
     
     # Make prediction when the 'Predict' button is clicked
     if st.button('Predict'):
