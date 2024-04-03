@@ -94,17 +94,13 @@ if predict_button:
 
     input_data = pd.concat([HG38_Start_df, mutant_codon_df, disease_df, variant_type_df], axis=1)
     
-    st.write(input_data.shape)
-    st.write(input_data)
+    # st.write(input_data.shape)
+    # st.write(input_data)
     
 
     prediction = model.predict(input_data)
-
-    
-
-
             
-    st.write('Prediction:', prediction)
+    # st.write('Prediction:', prediction)
     if prediction == 1:
         st.write("This mutant codon is Pathogenic")
     elif prediction == 2:
