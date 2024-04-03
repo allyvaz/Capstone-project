@@ -3,8 +3,9 @@ import pandas as pd
 from joblib import load
 import numpy as np
 
+
 # Load the trained model
-model = load('c:\\Users\\aliva\\Downloads\\Capstone\\Sprint 3\\pipeline.joblib')  # Replace 'pipeline.joblib' with the path to your trained model file
+model = load('pipeline.joblib')  # Replace 'pipeline.joblib' with the path to your trained model file
 
 # List of mutant codons
 mutant_codons = ['AAA', 'AAC', 'AAG', 'AAT', 'ACA', 'ACC', 'ACG', 'ACT', 'AGA', 'AGC', 'AGG', 'AGT', 'ATA', 'ATC', 'ATG', 
@@ -19,64 +20,100 @@ diseases = ['B-Chronic lymphocytic leukemia', 'Bladder carcinoma', 'Breast carci
             'Pancreatic carcinoma']
 
 # List of Variant Types
-variant_types = ['DEL', 'INS']
+variant_types = ['DEL', 'INS', 'SNP']
 
-# Function to predict pathogenicity
-def predict_pathogenicity(HG38_Start, mutant_codon, disease, variant_type):
-    # Prepare input data with the user-selected values
-    input_data = pd.DataFrame(columns=['HG38_Start'] + ['Mutant_Codon_' + mutant_codon for mutant_codon in mutant_codons] + 
-                              ['Disease_' + disease for disease in diseases] + 
-                              ['Variant_Type_' + variant_type for variant_type in variant_types])
-    
-    
-    
-    # Set the selected features
-    input_row = [HG38_Start] + \
-                [1 if mc == mutant_codon else 0 for mc in mutant_codons] + \
-                [1 if d == disease else 0 for d in diseases] + \
-                [1 if vt == variant_type else 0 for vt in variant_types] 
 
-    input_data.loc[0] = input_row
+def generate_encoded_df(label, options, prefix):
+    # UI input
+    selected_option = st.selectbox(label, options=options, key=label)
 
-    st.dataframe(input_data)
-    # st.write("Shape of input_data:", input_data.shape)  # Print the shape of input_data
-    # st.write("Data type of input_data:", input_data.dtypes)  # Print the data type of input_data
+    # Create DataFrame with dummy variables
+    encoded_df = pd.DataFrame(np.zeros((1, len(options))), columns=options)
+
+    # Set value for the selected option to 1
+    encoded_df.loc[0, selected_option] = 1
+
+    # Add prefix 'x0' to column names
+    encoded_df.columns = [prefix + col for col in encoded_df.columns]
+
+    return encoded_df
+
+
+
+
+# # Function to predict pathogenicity
+# def predict_pathogenicity(HG38_Start, mutant_codon, disease, variant_type):
+  
+#     # Prepare input data with the user-selected values
+#     input_data = pd.concat([HG38_Start_df, mutant_codon_df, disease_df, variant_type_df], axis=1)
     
-    # Make the prediction
+    
+#     # Check columns of the DataFrame
+#     print("Columns of input_data:", input_data.columns)
+
+#     st.write("Shape of input_data:", input_data.shape)  # Print the shape of input_data
+#     st.write("Data type of input_data:", input_data.dtypes)  # Print the data type of input_data
+
+#     # Make the prediction
+#     prediction = model.predict(input_data)
+#     return prediction
+
+
+
+# Set page title
+st.title('PathFinder: TP53 Variant Pathogenicity Predictor')
+
+# Add input fields for mutant codon, disease, variant type, HG38_Start, somatic_stat, and tumor_rep
+HG38_Start = st.text_input("Enter HG38 Start site:")
+
+Somatic_Stat = st.text_input("Enter Somatic_Stat:")
+Tumor_Repetition = st.text_input("Enter Tumor_Repetition:")
+
+                        
+mutant_codon_df = generate_encoded_df('Select Mutant Codon:', mutant_codons, 'Mutant_Codon_')
+disease_df = generate_encoded_df('Select Disease:', diseases, 'Disease_')
+variant_type_df = generate_encoded_df('Select Variant Type:', variant_types, 'Variant_Type_')
+
+
+predict_button = st.button('Predict', key='predict_button')
+
+
+# Make prediction when the 'Predict' button is clicked
+if predict_button:
+
+
+
+    HG38_Start_df = pd.DataFrame(columns=['HG38_Start'])
+    HG38_Start_df.loc[0, 'HG38_Start'] = int(HG38_Start)
+
+    Somatic_Stat_df = pd.DataFrame(columns=['Somatic_Stat'])
+    Somatic_Stat_df.loc[0, 'Somatic_Stat'] = Somatic_Stat
+
+    Tumor_Repetition_df = pd.DataFrame(columns=['Tumor_Repetition'])
+    Tumor_Repetition_df.loc[0, 'Tumor_Repetition'] = int(Tumor_Repetition)
+
+    input_data = pd.concat([HG38_Start_df, mutant_codon_df, disease_df, variant_type_df, Somatic_Stat_df, Tumor_Repetition_df], axis=1)
+    
+    st.write(input_data.shape)
+    st.write(input_data)
+    
+
     prediction = model.predict(input_data)
-    return prediction
+
+    
 
 
-# Main function to run the Streamlit app
-def main():
-    # Set page title
-    st.title('PathFinder: TP53 Variant Pathogenicity Predictor')
-    
-    # Add input fields for mutant codon, disease, variant type, HG38_Start, somatic_stat, and tumor_rep
-    HG38_Start = st.text_input("Enter HG38 Start site:")
-    mutant_codon = st.selectbox('Select Mutant Codon:', mutant_codons)
-    disease = st.selectbox('Select Disease:', diseases, index=diseases.index('Breast carcinoma'))
-    variant_type = st.selectbox('Select Variant Type:', variant_types)
-    
-    # Make prediction when the 'Predict' button is clicked
-    if st.button('Predict'):
-        # Convert inputs to integers
-        HG38_Start_int = int(HG38_Start)
-        prediction = predict_pathogenicity(HG38_Start_int, mutant_codon, disease, variant_type)
-        st.write('Prediction:', prediction)
-        if prediction == 1:
-            st.write("This mutant codon is Pathogenic")
-        elif prediction == 2:
-            st.write("This mutant codon is likely to be Pathogenic")
-        elif prediction == 3:
-            st.write("This mutant codon has uncertain significance")
-        elif prediction == 4:
-            st.write("This mutant codon is Benign")
-        else:
-            st.write("Unknown")
+            
+    st.write('Prediction:', prediction)
+    if prediction == 1:
+        st.write("This mutant codon is Pathogenic")
+    elif prediction == 2:
+        st.write("This mutant codon is likely to be Pathogenic")
+    elif prediction == 3:
+        st.write("This mutant codon has uncertain significance")
+    elif prediction == 4:
+        st.write("This mutant codon is Benign")
     else:
-        st.write('Please fill out the required fields to predict the pathogenicity')
-
-# Run the main function
-if __name__ == '__main__':
-    main()
+        st.write("Unknown")
+else:
+    st.write('Please fill out the required fields to predict the pathogenicity')
