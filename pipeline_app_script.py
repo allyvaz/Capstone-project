@@ -70,9 +70,9 @@ HG38_Start = st.text_input("Enter HG38 Start site for TP53 mutation:")
 # Tumor_Repetition = st.text_input("Enter Tumor_Repetition:")
 
                         
-mutant_codon_df = generate_encoded_df('Select Mutant Codon:', mutant_codons, 'Mutant_Codon_')
-disease_df = generate_encoded_df('Select Disease:', diseases, 'Disease_')
-variant_type_df = generate_encoded_df('Select Variant Type:', variant_types, 'Variant_Type_')
+mutant_codon_df = generate_encoded_df('Select Mutant Codon:', mutant_codons)
+disease_df = generate_encoded_df('Select Disease:', diseases)
+variant_type_df = generate_encoded_df('Select Variant Type:', variant_types)
 
 
 predict_button = st.button('Predict', key='predict_button')
