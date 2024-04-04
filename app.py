@@ -5,7 +5,7 @@ import numpy as np
 
 
 # Load the trained model
-model = load('pipeline.joblib')  # Replace 'pipeline.joblib' with the path to your trained model file
+model = load('pipeline_old.joblib')  # Replace 'pipeline.joblib' with the path to your trained model file
 
 # List of mutant codons
 mutant_codons = ['AAA', 'AAC', 'AAG', 'AAT', 'ACA', 'ACC', 'ACG', 'ACT', 'AGA', 'AGC', 'AGG', 'AGT', 'ATA', 'ATC', 'ATG', 
