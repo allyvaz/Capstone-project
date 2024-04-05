@@ -83,8 +83,12 @@
   
   
   </br><b>Model Evaluation</b>
-  </br>The baseline modeling was performed with logistic regression with an accuracy of 85%. However, it was determined that the features used for modeling were not able to capture the mutations and after feature engineering, the performance of the best random forest model was 97%.
+  </br>The baseline modeling was performed with logistic regression and random forest.The inital baseline random forest had a better accuracy than the log reg model. It was also determined that the features used for modeling were not able to capture the mutations and hence feature engineering was performed and the performance of the best random forest model was 93%.
+
+  </br><b>Deployed model</b>
+  </br> The model with the highest accuracy is deployed on the following link:
+  </br> https://capstone-project-pathfinder.streamlit.app/
 
   </br><b>Next Steps and Challenges</b>
-  </br>To try predict the variants of different genes most commonly occurring in Cancer and create an interactive app that helps researchers and clinicians look for commonly occurring pathogenic variants versus non-pathogenic ones.
+  </br>To try predict the variants of different genes most commonly occurring in Cancer and create another app that helps researchers and clinicians look for commonly occurring pathogenic variants versus non-pathogenic ones.
   </p>
