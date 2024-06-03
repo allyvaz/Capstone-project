@@ -23,7 +23,7 @@
     <br/>In the realm of cancer research, accurately identifying mutations (also known as variants) from next-generation sequencing of tumor samples poses a significant challenge. Variants exhibit diverse characteristics within the dataset, and both biological and technical variability complicate the process for variant callers. Various metrics, such as sequencing depth around the variant, the count of reads supporting the reference or mutated allele, the quality associated with these reads, and the confidence level of the tools in making specific calls, are crucial for assessing variants. This project will specifically explore the utility of one such metric: Variant Allele Frequency (VAF), in addressing these challenges.
     <br/><h3>Proposed Data Science strategy:</h3>
     <br/> 1. Prioritize <i>TP53</i> variants based on their predicted functional impact, frequency in the dataset, and relevance to pathogenesis.
-    <br/>2. Utilize machine learning algorithms, such as random forests, to rank  <i>TP53</i> variants according to their likelihood of driving breast cancer progression or treatment response. 
+    <br/>2. Utilize machine learning algorithms, such as random forests, to rank  <i>TP53</i> variants according to their likelihood of driving cancer progression or treatment response. 
   </p>
     <br/><h3>Impact of this solution:</h3>
     <br/>1. Improved Prioritization of Variants: Machine learning models can consider multiple features simultaneously, including variant type, allele frequency, and clinical data, to prioritize <i>TP53</i> variants more accurately. This can help researchers focus their efforts on investigating variants most likely to be clinically relevant.
